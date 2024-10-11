@@ -21,9 +21,7 @@ public class ItemMemoryStorage implements ItemStorage {
     @Override
     public Item add(ItemDto itemDto, User user) throws NotFoundDataException, ValidationException {
         long key = generateId();
-        if (key > 1) {
-            key++;
-        }
+        key++;
         Item newItem = ItemDto.fromDto(key, itemDto, user);
         itemMap.put(newItem.getId(), newItem);
 

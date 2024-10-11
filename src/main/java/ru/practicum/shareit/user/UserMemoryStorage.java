@@ -24,9 +24,7 @@ public class UserMemoryStorage implements UserStorage {
         if (checkUniqueUser(user)) {
             if (checkUniqueEmail(user)) {
                 long key = generateKey();
-                if (key > 1) {
-                    key++;
-                }
+                key++;
                 user.setId(key);
                 userMap.put(user.getId(), user);
                 emailSet.add(user.getEmail());

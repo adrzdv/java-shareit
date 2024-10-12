@@ -20,5 +20,5 @@ public class Booking {
     private LocalDateTime end;
     private Item item;
     private User owner;
-    private Status status;
+    private AvailabilityStatus status;
 }

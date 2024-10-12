@@ -86,7 +86,7 @@ public class UserMemoryStorage implements UserStorage {
     public List<UserDto> getAll() {
         List<UserDto> result = new ArrayList<>();
         for (User user : userMap.values()) {
-            result.add(UserDto.toDto(user));
+            result.add(UserMapper.toDto(user));
         }
 
         return result;

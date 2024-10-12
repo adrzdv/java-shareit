@@ -22,7 +22,7 @@ public class ItemMemoryStorage implements ItemStorage {
     public Item add(ItemDto itemDto, User user) throws NotFoundDataException, ValidationException {
         long key = generateId();
         key++;
-        Item newItem = ItemDto.fromDto(key, itemDto, user);
+        Item newItem = ItemMapper.fromDto(key, itemDto, user);
         itemMap.put(newItem.getId(), newItem);
 
         return get(newItem.getId());
@@ -87,12 +87,12 @@ public class ItemMemoryStorage implements ItemStorage {
         List<ItemDto> itemsByName = itemMap.values().stream()
                 .filter(item -> item.getName().toLowerCase().equals(searchString))
                 .filter(Item::isAvailable)
-                .map(ItemDto::toDto)
+                .map(ItemMapper::toDto)
                 .toList();
         List<ItemDto> itemsByDescription = itemMap.values().stream()
                 .filter(item -> item.getDescription().toLowerCase().equals(searchString))
                 .filter(Item::isAvailable)
-                .map(ItemDto::toDto)
+                .map(ItemMapper::toDto)
                 .toList();
         if (!itemsByName.isEmpty()) {
             result.addAll(itemsByName);

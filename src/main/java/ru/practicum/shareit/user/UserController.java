@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
-import ru.practicum.shareit.exceptions.NotUniqueEmail;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
@@ -24,13 +23,13 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User add(@Valid @RequestBody User user) throws NotUniqueEmail, NotFoundDataException {
+    public User add(@Valid @RequestBody User user) {
         return userService.add(user);
     }
 
     @PatchMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User update(@RequestBody User user, @PathVariable long id) throws NotFoundDataException, NotUniqueEmail {
+    public User update(@RequestBody User user, @PathVariable long id) {
         return userService.update(user, id);
     }
 
@@ -45,7 +44,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable long id) throws NotFoundDataException {
+    public void delete(@PathVariable long id) {
         userService.delete(id);
     }
 }

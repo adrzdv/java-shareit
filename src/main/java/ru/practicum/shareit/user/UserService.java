@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user;
 
 import ru.practicum.shareit.exceptions.NotFoundDataException;
-import ru.practicum.shareit.exceptions.NotUniqueEmail;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
@@ -13,21 +12,17 @@ public interface UserService {
      *
      * @param user User object
      * @return User object from storage
-     * @throws NotUniqueEmail
-     * @throws NotFoundDataException
      */
-    User add(User user) throws NotUniqueEmail, NotFoundDataException;
+    User add(User user);
 
     /**
      * Update an existing User
      *
      * @param user User object for update
      * @param id   identification number
-     * @return
-     * @throws NotFoundDataException
-     * @throws NotUniqueEmail
+     * @return User object
      */
-    User update(User user, long id) throws NotFoundDataException, NotUniqueEmail;
+    User update(User user, long id);
 
     /**
      * Get an existing user by ID
@@ -49,7 +44,6 @@ public interface UserService {
      * Delete an existing user
      *
      * @param id identification number
-     * @throws NotFoundDataException
      */
-    void delete(long id) throws NotFoundDataException;
+    void delete(long id);
 }

@@ -38,4 +38,16 @@ public class ErrorHandler {
         return new ErrorCustomResponse("Error", e.getMessage());
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorCustomResponse unavailableItemException(final UnavailableItemException e) {
+        return new ErrorCustomResponse("Error", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorCustomResponse bookingException(final BookingException e) {
+        return new ErrorCustomResponse("Error", e.getMessage());
+    }
+
 }

@@ -4,6 +4,7 @@ import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.exceptions.NotOwnerException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoResponse;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
@@ -40,10 +41,10 @@ public interface ItemService {
      * Get an existing item by ID
      *
      * @param id identification number of item
-     * @return Item object
+     * @return ItemDtoResponse
      * @throws NotFoundDataException
      */
-    Item get(long id) throws NotFoundDataException;
+    ItemDtoResponse get(long id) throws NotFoundDataException;
 
     /**
      * Delete an existing item
@@ -57,10 +58,10 @@ public interface ItemService {
      * Get existing items by current owner
      *
      * @param id identification number of owner
-     * @return List of Item objects
+     * @return List of ItemDtoResponse objects
      * @throws NotFoundDataException
      */
-    List<Item> getUserItems(long id) throws NotFoundDataException;
+    List<ItemDtoResponse> getUserItems(long id) throws NotFoundDataException;
 
     /**
      * Search exiting items by response text

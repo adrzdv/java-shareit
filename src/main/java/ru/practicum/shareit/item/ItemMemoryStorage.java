@@ -22,7 +22,7 @@ public class ItemMemoryStorage implements ItemStorage {
     public Item add(ItemDto itemDto, User user) throws NotFoundDataException, ValidationException {
         long key = generateId();
         key++;
-        Item newItem = ItemMapper.fromDto(key, itemDto, user);
+        Item newItem = ItemMapper.fromDto(itemDto, user);
         itemMap.put(newItem.getId(), newItem);
 
         return get(newItem.getId());

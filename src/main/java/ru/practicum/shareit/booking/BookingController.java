@@ -21,7 +21,6 @@ public class BookingController {
 
     private final BookingService bookingService;
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookingDtoResponse add(@RequestBody @Valid BookingDto bookingDto,
@@ -32,8 +31,8 @@ public class BookingController {
     @PatchMapping(value = "/{idBooking}")
     @ResponseStatus(HttpStatus.OK)
     public BookingDtoResponse approve(@RequestHeader("X-Sharer-User-Id") long idUser,
-                              @PathVariable long idBooking,
-                              @RequestParam(required = true) boolean approved) throws NotOwnerException, NotFoundDataException {
+                                      @PathVariable long idBooking,
+                                      @RequestParam(required = true) boolean approved) throws NotOwnerException, NotFoundDataException {
         return bookingService.approve(idBooking, idUser, approved);
     }
 
@@ -45,14 +44,14 @@ public class BookingController {
 
     @GetMapping(value = "/owner")
     public List<BookingDtoResponse> getByOwner(@RequestHeader("X-Sharer-User-Id") long idUser,
-                           @RequestParam(required = false, defaultValue = "ALL") String state) throws NotFoundDataException {
+                                               @RequestParam(required = false, defaultValue = "ALL") String state) throws NotFoundDataException {
         return bookingService.getByOwner(idUser, state);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDtoResponse> getByBooker(@RequestHeader("X-Sharer-User-Id") long idUser,
-                                        @RequestParam(required = false, defaultValue = "ALL") String state) {
+                                                @RequestParam(required = false, defaultValue = "ALL") String state) {
         return bookingService.getByBooker(idUser, state);
     }
 

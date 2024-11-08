@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.comment.dto.CommentDto;
+import ru.practicum.shareit.comment.model.Comment;
 import ru.practicum.shareit.exceptions.BookingException;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.item.ItemRepository;
@@ -28,8 +29,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto postComment(long idItem, long idUser, String text) throws BookingException, NotFoundDataException {
         List<BookingDtoResponse> bookingDtoResponseList = bookingService.getByBooker(idUser, "ALL");
-        String[] splitText = text.split(":");
-        String resText = splitText[1].substring(splitText[1].indexOf('"') + 1, splitText[1].lastIndexOf('"'));
 
         if (bookingDtoResponseList
                 .stream()
@@ -55,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         Comment comment = Comment.builder()
-                .text(resText)
+                .text(text)
                 .item(item)
                 .author(userOptional.get())
                 .created(LocalDateTime.now())

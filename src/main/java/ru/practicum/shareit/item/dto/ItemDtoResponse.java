@@ -4,6 +4,7 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import ru.practicum.shareit.comment.dto.CommentDto;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
@@ -27,4 +28,5 @@ public class ItemDtoResponse {
     private LocalDateTime nextBooking;
     @Transient
     private List<CommentDto> comments;
+    private ItemRequest itemRequests;
 }

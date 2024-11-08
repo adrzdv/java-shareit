@@ -18,6 +18,6 @@ public class ItemDto {
     private String description;
     @NotBlank
     private String available;
-    private long request;
+    private long requestId;
 
 }

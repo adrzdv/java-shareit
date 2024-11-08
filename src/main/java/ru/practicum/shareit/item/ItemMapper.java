@@ -2,7 +2,9 @@ package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoResponse;
+import ru.practicum.shareit.item.dto.ItemDtoShort;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 public class ItemMapper {
@@ -19,7 +21,7 @@ public class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(String.valueOf(item.isAvailable()))
-                .request(item.getRequest() != null ? item.getRequest().getId() : 0)
+                .requestId(item.getRequest() != null ? item.getRequest().getId() : 0)
                 .build();
     }
 
@@ -38,6 +40,24 @@ public class ItemMapper {
                 .available(Boolean.parseBoolean(itemDto.getAvailable()))
                 .owner(user)
                 .request(null)
+                .build();
+    }
+
+    /**
+     * Method to transfer item DTO to item object having request
+     *
+     * @param itemDto itemDto object to transfer
+     * @param user    user object (item's owner)
+     * @param request ItemRequest object
+     * @return Item object
+     */
+    public static Item fromDtoWithRequest(ItemDto itemDto, User user, ItemRequest request) {
+        return Item.builder()
+                .name(itemDto.getName())
+                .description(itemDto.getDescription())
+                .available(Boolean.parseBoolean(itemDto.getAvailable()))
+                .owner(user)
+                .request(request)
                 .build();
     }
 
@@ -72,6 +92,22 @@ public class ItemMapper {
                 .description(item.getDescription())
                 .available(String.valueOf(item.isAvailable()))
                 .owner(item.getOwner())
+                .itemRequests(item.getRequest())
+                .build();
+    }
+
+    /**
+     * Method for transfer Item object to ItemDtoShort object
+     *
+     * @param item Item object
+     * @return ItemDtoShort object
+     */
+    public static ItemDtoShort toDtoShort(Item item) {
+
+        return ItemDtoShort.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .idOwner(item.getOwner().getId())
                 .build();
     }
 }

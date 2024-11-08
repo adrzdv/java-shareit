@@ -2,7 +2,6 @@ package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.exceptions.NotOwnerException;
-import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoResponse;
 import ru.practicum.shareit.item.model.Item;
@@ -20,9 +19,8 @@ public interface ItemService {
      * @param id      identification number of user (owner)
      * @return Item
      * @throws NotFoundDataException
-     * @throws ValidationException
      */
-    Item add(ItemDto itemDto, long id) throws NotFoundDataException, ValidationException;
+    Item add(ItemDto itemDto, long id) throws NotFoundDataException;
 
 
     /**

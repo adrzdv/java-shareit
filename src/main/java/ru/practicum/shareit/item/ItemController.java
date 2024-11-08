@@ -4,11 +4,11 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.comment.model.CommentDescriptionObject;
 import ru.practicum.shareit.comment.CommentService;
 import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.exceptions.NotOwnerException;
-import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoResponse;
 import ru.practicum.shareit.item.model.Item;
@@ -28,7 +28,7 @@ public class ItemController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public Item add(@RequestBody @Valid ItemDto itemDto,
-                    @RequestHeader("X-Sharer-User-Id") long id) throws NotFoundDataException, ValidationException {
+                    @RequestHeader("X-Sharer-User-Id") long id) throws NotFoundDataException {
 
         return itemService.add(itemDto, id);
     }
@@ -63,14 +63,15 @@ public class ItemController {
     @GetMapping(value = "/search")
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> search(@RequestParam String text) {
+
         return itemService.search(text);
     }
 
     @PostMapping(value = "/{idItem}/comment")
     @ResponseStatus(HttpStatus.OK)
     public CommentDto postComment(@PathVariable long idItem,
-                                  @RequestBody String text,
+                                  @RequestBody CommentDescriptionObject text,
                                   @RequestHeader("X-Sharer-User-Id") long idUser) throws NotFoundDataException {
-        return commentService.postComment(idItem, idUser, text);
+        return commentService.postComment(idItem, idUser, text.getText());
     }
 }

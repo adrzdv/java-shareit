@@ -10,10 +10,14 @@ import ru.practicum.shareit.comment.CommentRepository;
 import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.exceptions.NotOwnerException;
-import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoResponse;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequestMapper;
+import ru.practicum.shareit.request.ItemRequestRepository;
+import ru.practicum.shareit.request.ItemRequestService;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 
@@ -27,10 +31,27 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestService itemRequestService;
+    private final ItemRequestRepository itemRequestRepository;
 
     @Override
-    public Item add(ItemDto itemDto, long id) throws NotFoundDataException, ValidationException {
-        Item item = ItemMapper.fromDto(itemDto, userService.get(id));
+    public Item add(ItemDto itemDto, long id) throws NotFoundDataException {
+
+        Item item;
+        if (itemDto.getRequestId() != 0) {
+            ItemRequestDto itemRequestDto = itemRequestService.finById(itemDto.getRequestId());
+            Optional<ItemRequest> itemRequestOptional = itemRequestRepository.findById(itemRequestDto.getId());
+            if (itemRequestOptional.isEmpty()) {
+                throw new NotFoundDataException("Request not found");
+            }
+
+            User requestor = userService.get(itemRequestOptional.get().getRequestor().getId());
+
+            ItemRequest itemRequest = ItemRequestMapper.fromDto(itemRequestDto, requestor);
+            item = ItemMapper.fromDtoWithRequest(itemDto, userService.get(id), itemRequest);
+        } else {
+            item = ItemMapper.fromDto(itemDto, userService.get(id));
+        }
         return itemRepository.save(item);
     }
 
@@ -77,8 +98,13 @@ public class ItemServiceImpl implements ItemService {
         Map<String, LocalDateTime> dateTimeMap = new HashMap<>();
         if (!bookingList.isEmpty()) {
             if (bookingList.size() == 1) {
-                dateTimeMap.put("Past", null);
-                dateTimeMap.put("Next", null);
+                if (bookingList.getFirst().getStart().isAfter(LocalDateTime.now())) {
+                    dateTimeMap.put("Past", null);
+                    dateTimeMap.put("Next", bookingList.getFirst().getStart());
+                } else if (bookingList.getFirst().getEnd().isBefore(LocalDateTime.now())) {
+                    dateTimeMap.put("Past", bookingList.getFirst().getEnd());
+                    dateTimeMap.put("Next", null);
+                }
             } else {
                 dateTimeMap = getLastAndEndDate(bookingList, itemOptional.get().getId());
             }
@@ -94,6 +120,7 @@ public class ItemServiceImpl implements ItemService {
         result.setLastBooking(dateTimeMap.get("Past"));
         result.setNextBooking(dateTimeMap.get("Next"));
         result.setComments(commentList);
+        result.setItemRequests(itemOptional.get().getRequest());
 
         return result;
     }
@@ -179,22 +206,28 @@ public class ItemServiceImpl implements ItemService {
      * @return Map of last and next LocalDateTime data of booking
      */
     private Map<String, LocalDateTime> getLastAndEndDate(List<BookingDtoResponse> bookingList, long idItems) {
-        BookingDtoResponse bookingNext = bookingList.stream()
+        Map<String, LocalDateTime> result = new HashMap<>();
+
+        Optional<BookingDtoResponse> bookingNext = bookingList.stream()
                 .filter(bookingDtoResponse -> bookingDtoResponse.getItem().getId() == idItems)
                 .filter(bookingDtoResponse -> bookingDtoResponse.getStart().isAfter(LocalDateTime.now()))
-                .findFirst()
-                .get();
+                .findFirst();
 
-        BookingDtoResponse bookingPast = bookingList.stream()
-                .filter(bookingDtoResponse -> bookingDtoResponse.getItem().getId() == idItems)
-                .filter(bookingDtoResponse -> bookingDtoResponse.getEnd().isBefore(LocalDateTime.now()))
-                .filter(bookingDtoResponse -> bookingDtoResponse.getId() != bookingNext.getId())
-                .max(Comparator.comparing(BookingDtoResponse::getEnd))
-                .get();
-
-        Map<String, LocalDateTime> result = new HashMap<>();
-        result.put("Next", bookingNext.getStart());
-        result.put("Past", bookingPast.getEnd());
+        if (bookingNext.isPresent()) {
+            result.put("Next", bookingNext.get().getStart());
+            Optional<BookingDtoResponse> bookingPast = bookingList.stream()
+                    .filter(bookingDtoResponse -> bookingDtoResponse.getItem().getId() == idItems)
+                    .filter(bookingDtoResponse -> bookingDtoResponse.getEnd().isBefore(LocalDateTime.now()))
+                    .filter(bookingDtoResponse -> bookingDtoResponse.getId() != bookingNext.get().getId())
+                    .max(Comparator.comparing(BookingDtoResponse::getEnd));
+            bookingPast.ifPresent(bookingDtoResponse -> result.put("Past", bookingDtoResponse.getEnd()));
+        } else {
+            Optional<BookingDtoResponse> bookingPast = bookingList.stream()
+                    .filter(bookingDtoResponse -> bookingDtoResponse.getItem().getId() == idItems)
+                    .filter(bookingDtoResponse -> bookingDtoResponse.getEnd().isBefore(LocalDateTime.now()))
+                    .max(Comparator.comparing(BookingDtoResponse::getEnd));
+            bookingPast.ifPresent(bookingDtoResponse -> result.put("Past", bookingDtoResponse.getEnd()));
+        }
 
         return result;
     }

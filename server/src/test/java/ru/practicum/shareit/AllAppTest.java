@@ -18,7 +18,6 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.comment.CommentService;
 import ru.practicum.shareit.comment.dto.CommentDto;
-import ru.practicum.shareit.comment.model.Comment;
 import ru.practicum.shareit.exceptions.BookingException;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.item.ItemMapper;

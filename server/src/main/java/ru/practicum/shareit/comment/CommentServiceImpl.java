@@ -38,11 +38,8 @@ public class CommentServiceImpl implements CommentService {
                 .isEmpty()) {
             throw new BookingException("Item was not booked by the user");
         }
-        Optional<User> userOptional = Optional.ofNullable(userService.get(idUser));
 
-        if (userOptional.isEmpty()) {
-            throw new NotFoundDataException("User not found");
-        }
+        User user = userService.get(idUser);
 
         Optional<Item> itemOptional = itemRepository.findById(idItem);
         Item item;
@@ -56,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = Comment.builder()
                 .text(text)
                 .item(item)
-                .author(userOptional.get())
+                .author(user)
                 .created(LocalDateTime.now())
                 .build();
 

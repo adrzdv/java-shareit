@@ -5,6 +5,7 @@ services:
       - "5432:5432"
     volumes:
       - ./volumes/postgres:/var/lib/postgresql/data/
+    container_name: shareit-db
     environment:
       - POSTGRES_DB=shareit
       - POSTGRES_USER=dbuser
@@ -15,19 +16,30 @@ services:
       interval: 5s
       retries: 10
 
-  db-test:
-    image: postgres:16.1
+  server:
+    build: server
+    image: shareit-server
+    container_name: shareit-server
     ports:
-      - "5433:5433"
-    volumes:
-      - ./volumes/postgres:/var/lib/postgresql/data/
+      - "9090:9090"
+    depends_on:
+      - db
     environment:
-      - POSTGRES_DB=test
-      - POSTGRES_USER=dbuser
-      - POSTGRES_PASSWORD=12345
-    healthcheck:
-      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
-      timeout: 5s
-      interval: 5s
-      retries: 10
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
+      - SPRING_DATASOURCE_USERNAME=dbuser
+      - SPRING_DATASOURCE_PASSWORD=12345
+
+  gateway:
+    build: gateway
+    image: shareit-gateway
+    container_name: shareit-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server
+    #environment:
+    #  - SHAREIT_SERVER_URL=http://server:9090
+
+
+
 

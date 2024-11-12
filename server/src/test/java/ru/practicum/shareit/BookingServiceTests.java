@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.booking.AvailabilityStatus;
 import ru.practicum.shareit.booking.BookingService;
@@ -44,7 +42,6 @@ public class BookingServiceTests {
     private BookingDtoResponse bookingResponse;
     private Item item;
 
-    private MockMvc mvc;
 
     @Autowired
     BookingServiceTests(BookingService bs, UserService us, ItemService is) {
@@ -55,9 +52,6 @@ public class BookingServiceTests {
 
     @BeforeEach
     void setup(WebApplicationContext wac) throws Exception {
-//        mvc = MockMvcBuilders
-//                .webAppContextSetup(wac)
-//                .build();
         User bookerAdd = User.builder()
                 .name(RandomString.make(RandomString.DEFAULT_LENGTH))
                 .email(RandomString.make(RandomString.DEFAULT_LENGTH) + "@email.com")

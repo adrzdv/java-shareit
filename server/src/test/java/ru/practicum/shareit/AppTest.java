@@ -37,8 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.hamcrest.Matchers.*;
 
 @Transactional
-@SpringBootTest(properties = {"jdbc.url=jdbc:postgresql://localhost:5432/test"},
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(properties = {"jdbc.url=jdbc:postgresql://localhost:5432/test"})
 @Rollback(value = false)
 class AppTest {
     private final ItemService is;

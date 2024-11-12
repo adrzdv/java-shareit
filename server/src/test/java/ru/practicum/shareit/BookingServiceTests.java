@@ -32,7 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Transactional
 @SpringBootTest(properties = {"jdbc.url=jdbc:postgresql://localhost:5432/test"},
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
+classes = {BookingService.class, UserService.class, ItemService.class})
 @Rollback(value = false)
 public class BookingServiceTests {
     private final BookingService bs;

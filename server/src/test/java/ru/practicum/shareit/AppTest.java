@@ -9,11 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.booking.AvailabilityStatus;
-import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
@@ -22,7 +19,6 @@ import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.exceptions.BookingException;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.item.ItemMapper;
-import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.ItemRequestMapper;
@@ -30,7 +26,6 @@ import ru.practicum.shareit.request.ItemRequestService;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
@@ -61,9 +56,6 @@ class AppTest {
     private long userOwnerId;
     private long idItem;
 
-
-    private MockMvc mvc;
-
     @Autowired
     AppTest(EntityManager em,
             ItemService is,
@@ -81,9 +73,7 @@ class AppTest {
 
     @BeforeEach
     void setup(WebApplicationContext wac) throws NotFoundDataException {
-        mvc = MockMvcBuilders
-                .webAppContextSetup(wac)
-                .build();
+
         int randomLength = 20;
         userRequestor = User.builder()
                 .name(RandomString.make(RandomString.DEFAULT_LENGTH))

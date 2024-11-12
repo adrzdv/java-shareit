@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -50,7 +48,6 @@ public class ItemServiceTest {
     private Item itemTestSearch;
     private Item item;
 
-    private MockMvc mvc;
 
     @Autowired
     ItemServiceTest(EntityManager em, ItemService is, UserService us, BookingService bs, CommentService coms) {
@@ -63,9 +60,7 @@ public class ItemServiceTest {
 
     @BeforeEach
     void setup(WebApplicationContext wac) throws NotFoundDataException {
-        mvc = MockMvcBuilders
-                .webAppContextSetup(wac)
-                .build();
+
 
         searchString = RandomString.make(RandomString.DEFAULT_LENGTH);
         userItemOwnerSearch = User.builder()

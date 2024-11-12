@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.user.User;
@@ -30,7 +28,6 @@ public class UserServiceTest {
 
     private final UserService us;
 
-    private MockMvc mvc;
     private long id;
 
     @Autowired
@@ -40,9 +37,7 @@ public class UserServiceTest {
 
     @BeforeEach
     void setUp(WebApplicationContext wac) {
-        mvc = MockMvcBuilders
-                .webAppContextSetup(wac)
-                .build();
+
         String name = RandomString.make(RandomString.DEFAULT_LENGTH);
         String email = RandomString.make(RandomString.DEFAULT_LENGTH) + "@mail.com";
         User user = User.builder()

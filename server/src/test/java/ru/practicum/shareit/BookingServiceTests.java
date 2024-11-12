@@ -55,9 +55,9 @@ public class BookingServiceTests {
 
     @BeforeEach
     void setup(WebApplicationContext wac) throws Exception {
-        mvc = MockMvcBuilders
-                .webAppContextSetup(wac)
-                .build();
+//        mvc = MockMvcBuilders
+//                .webAppContextSetup(wac)
+//                .build();
         User bookerAdd = User.builder()
                 .name(RandomString.make(RandomString.DEFAULT_LENGTH))
                 .email(RandomString.make(RandomString.DEFAULT_LENGTH) + "@email.com")

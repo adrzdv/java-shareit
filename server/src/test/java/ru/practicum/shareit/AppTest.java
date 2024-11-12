@@ -64,7 +64,6 @@ class AppTest {
 
     private MockMvc mvc;
 
-
     @Autowired
     AppTest(EntityManager em,
             ItemService is,

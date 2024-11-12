@@ -12,7 +12,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.comment.CommentService;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.exceptions.NotOwnerException;
 import ru.practicum.shareit.item.ItemMapper;
@@ -36,26 +35,19 @@ import static org.junit.jupiter.api.Assertions.*;
 @Rollback(value = false)
 public class ItemServiceTest {
 
-    private final ItemService is;
-    private final UserService us;
-    private final EntityManager em;
-    private final BookingService bs;
-    private final CommentService coms;
+    @Autowired
+    private ItemService is;
+    @Autowired
+    private UserService us;
+    @Autowired
+    private EntityManager em;
+    @Autowired
+    private BookingService bs;
 
     private String searchString;
     private User userItemOwnerSearch;
     private Item itemTestSearch;
     private Item item;
-
-
-    @Autowired
-    ItemServiceTest(EntityManager em, ItemService is, UserService us, BookingService bs, CommentService coms) {
-        this.is = is;
-        this.us = us;
-        this.em = em;
-        this.bs = bs;
-        this.coms = coms;
-    }
 
     @BeforeEach
     void setup(WebApplicationContext wac) throws NotFoundDataException {

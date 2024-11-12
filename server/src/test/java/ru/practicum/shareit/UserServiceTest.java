@@ -25,14 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Rollback(value = false)
 public class UserServiceTest {
 
-    private final UserService us;
+    @Autowired
+    private UserService us;
 
     private long id;
-
-    @Autowired
-    public UserServiceTest(UserService us) {
-        this.us = us;
-    }
 
     @BeforeEach
     void setUp(WebApplicationContext wac) {

@@ -32,22 +32,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest(properties = {"jdbc.url=jdbc:postgresql://localhost:5432/test"})
 @Rollback(value = false)
 public class BookingServiceTests {
-    private final BookingService bs;
-    private final UserService us;
-    private final ItemService is;
+    @Autowired
+    private BookingService bs;
+    @Autowired
+    private UserService us;
+    @Autowired
+    private ItemService is;
     private User booker;
     private User owner;
     private BookingDto bookingDto;
     private BookingDtoResponse bookingResponse;
     private Item item;
 
-
-    @Autowired
-    BookingServiceTests(BookingService bs, UserService us, ItemService is) {
-        this.bs = bs;
-        this.us = us;
-        this.is = is;
-    }
 
     @BeforeEach
     void setup(WebApplicationContext wac) throws Exception {

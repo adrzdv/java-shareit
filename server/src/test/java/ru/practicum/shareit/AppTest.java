@@ -40,12 +40,19 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest(properties = {"jdbc.url=jdbc:postgresql://localhost:5432/test"})
 @Rollback(value = false)
 class AppTest {
-    private final ItemService is;
-    private final UserService us;
-    private final EntityManager em;
-    private final ItemRequestService irs;
-    private final CommentService cs;
-    private final BookingService bs;
+    @Autowired
+    private ItemService is;
+    @Autowired
+    private UserService us;
+    @Autowired
+    private EntityManager em;
+    @Autowired
+    private ItemRequestService irs;
+    @Autowired
+    private CommentService cs;
+    @Autowired
+    private BookingService bs;
+
     private long userRequestorId;
     private User userItemOwner;
     private User userRequestor;
@@ -54,21 +61,6 @@ class AppTest {
     private ItemRequestDto itemRequestDto;
     private long userOwnerId;
     private long idItem;
-
-    @Autowired
-    AppTest(EntityManager em,
-            ItemService is,
-            UserService us,
-            ItemRequestService irs,
-            CommentService cs,
-            BookingService bs) {
-        this.is = is;
-        this.us = us;
-        this.em = em;
-        this.irs = irs;
-        this.cs = cs;
-        this.bs = bs;
-    }
 
     @BeforeEach
     void setup(WebApplicationContext wac) throws NotFoundDataException {

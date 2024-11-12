@@ -40,9 +40,7 @@ import static org.hamcrest.Matchers.*;
 
 @Transactional
 @SpringBootTest(properties = {"jdbc.url=jdbc:postgresql://localhost:5432/test"},
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        classes = {ItemService.class, UserService.class, ItemRequestService.class, CommentService.class,
-                BookingService.class, EntityManager.class})
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @Rollback(value = false)
 class AllAppTest {
     private final ItemService is;

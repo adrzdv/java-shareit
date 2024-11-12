@@ -26,16 +26,23 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class DtoTests {
-    private final JacksonTester<UserDto> jsonUser;
-    private final JacksonTester<BookingDto> jsonBooking;
-    private final JacksonTester<BookingDtoResponse> jsonBookingResponse;
-    private final JacksonTester<CommentDto> jsonComment;
-    private final JacksonTester<Item> jsonItem;
-    private final JacksonTester<ItemDto> jsonItemDto;
-    private final JacksonTester<ItemDtoResponse> jsonItemResponse;
-    private final JacksonTester<ItemRequest> jsonItemRequest;
+    @Autowired
+    private JacksonTester<UserDto> jsonUser;
+    @Autowired
+    private JacksonTester<BookingDto> jsonBooking;
+    @Autowired
+    private JacksonTester<BookingDtoResponse> jsonBookingResponse;
+    @Autowired
+    private JacksonTester<CommentDto> jsonComment;
+    @Autowired
+    private JacksonTester<Item> jsonItem;
+    @Autowired
+    private JacksonTester<ItemDto> jsonItemDto;
+    @Autowired
+    private JacksonTester<ItemDtoResponse> jsonItemResponse;
+    @Autowired
+    private JacksonTester<ItemRequest> jsonItemRequest;
 
     private final User user = User.builder()
             .id(1L)

@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.booking.AvailabilityStatus;
+import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoResponse;
@@ -21,6 +22,7 @@ import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.exceptions.BookingException;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.ItemRequestMapper;
@@ -28,6 +30,7 @@ import ru.practicum.shareit.request.ItemRequestService;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
@@ -40,9 +43,12 @@ import static org.hamcrest.Matchers.*;
 
 @Transactional
 @SpringBootTest(properties = {"jdbc.url=jdbc:postgresql://localhost:5432/test"},
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
+        classes = {ItemService.class, UserService.class, EntityManager.class, ItemRequestService.class, CommentService.class,
+        BookingService.class, User.class, Item.class, ItemRequestDto.class, ItemRepository.class, UserRepository.class,
+        BookingRepository.class})
 @Rollback(value = false)
-class AllAppTest {
+class AppTest {
     private final ItemService is;
     private final UserService us;
     private final EntityManager em;
@@ -63,12 +69,12 @@ class AllAppTest {
 
 
     @Autowired
-    AllAppTest(EntityManager em,
-               ItemService is,
-               UserService us,
-               ItemRequestService irs,
-               CommentService cs,
-               BookingService bs) {
+    AppTest(EntityManager em,
+            ItemService is,
+            UserService us,
+            ItemRequestService irs,
+            CommentService cs,
+            BookingService bs) {
         this.is = is;
         this.us = us;
         this.em = em;
@@ -177,7 +183,7 @@ class AllAppTest {
 
         assertThrows(NotFoundDataException.class,
                 () -> {
-            is.get(idItem);
+                    is.get(idItem);
                 });
 
         assertThrows(NotFoundDataException.class,

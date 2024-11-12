@@ -103,6 +103,19 @@ public class ItemServiceTest {
         assertThat(iq.getDescription(), equalTo(itemTest.getDescription()));
         assertThat(iq.getOwner(), equalToObject(userItemOwner));
 
+        ItemDto itemForAnotherUpdate = ItemDto.builder()
+                .description("New description for test")
+                .build();
+        is.update(itemForAnotherUpdate, item.getOwner().getId(), item.getId());
+
+        TypedQuery<Item> itemQueryAnother = em.createQuery("Select i from Item i where i.id = :id", Item.class);
+        Item iqa = itemQueryAnother.setParameter("id", item.getId()).getSingleResult();
+
+        assertThat(iqa.getId(), equalTo(item.getId()));
+        assertThat(iqa.getName(), equalTo(item.getName()));
+        assertThat(iqa.getDescription(), equalTo(itemForAnotherUpdate.getDescription()));
+        assertThat(iqa.getOwner(), equalToObject(userItemOwner));
+
     }
 
     @Test
@@ -149,7 +162,7 @@ public class ItemServiceTest {
     @Test
     void checkGetLastAndLateDate() throws Exception {
 
-        List<ItemDtoResponse> list = is.getUserItems(2L);
+        List<ItemDtoResponse> list = is.getUserItems(userItemOwnerSearch.getId());
         assertFalse(list.isEmpty());
 
     }
@@ -183,4 +196,5 @@ public class ItemServiceTest {
                     is.add(itemDto, itemTestSearch.getId());
                 });
     }
+
 }

@@ -14,6 +14,7 @@ import ru.practicum.shareit.booking.dto.BookingDtoResponse;
 import ru.practicum.shareit.exceptions.BookingException;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.exceptions.NotOwnerException;
+import ru.practicum.shareit.exceptions.UnavailableItemException;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
@@ -137,7 +138,7 @@ public class BookingServiceTests {
         BookingDto booking = BookingDto.builder()
                 .start(null)
                 .end(null)
-                .itemId(1L)
+                .itemId(item.getId())
                 .booker(1L)
                 .status(AvailabilityStatus.WAITING)
                 .build();
@@ -146,21 +147,55 @@ public class BookingServiceTests {
                 () -> {
                     bs.add(booking, 1L);
                 });
+    }
 
-        booking.setEnd(LocalDateTime.now().minusHours(1L));
+    @Test
+    void checkEndInPast() throws Exception {
+
+        BookingDto booking = BookingDto.builder()
+                .start(LocalDateTime.now().minusHours(3L))
+                .end(null)
+                .itemId(item.getId())
+                .booker(1L)
+                .status(AvailabilityStatus.WAITING)
+                .build();
+        booking.setEnd(LocalDateTime.now().minusDays(3L));
 
         assertThrows(BookingException.class,
                 () -> {
                     bs.add(booking, 1L);
                 });
+    }
 
-        booking.setEnd(null);
-        booking.setStart(LocalDateTime.now().minusHours(1L));
+    @Test
+    void checkStartInPast() throws Exception {
+
+        BookingDto booking = BookingDto.builder()
+                .start(null)
+                .end(null)
+                .itemId(item.getId())
+                .booker(1L)
+                .status(AvailabilityStatus.WAITING)
+                .build();
+
+        booking.setStart(LocalDateTime.now().minusDays(2L));
 
         assertThrows(BookingException.class,
                 () -> {
                     bs.add(booking, 1L);
                 });
+    }
+
+    @Test
+    void checkEqualDates() throws Exception {
+
+        BookingDto booking = BookingDto.builder()
+                .start(null)
+                .end(null)
+                .itemId(item.getId())
+                .booker(1L)
+                .status(AvailabilityStatus.WAITING)
+                .build();
 
         LocalDateTime testDateTime = LocalDateTime.now();
         booking.setStart(testDateTime);
@@ -170,7 +205,41 @@ public class BookingServiceTests {
                 () -> {
                     bs.add(booking, 1L);
                 });
+    }
 
+    @Test
+    void bookUnavailableItem() throws Exception {
+
+        BookingDto booking = BookingDto.builder()
+                .start(LocalDateTime.now().plusHours(3L))
+                .end(LocalDateTime.now().plusHours(4L))
+                .itemId(item.getId())
+                .booker(1L)
+                .status(AvailabilityStatus.WAITING)
+                .build();
+
+        item.setAvailable(false);
+
+        assertThrows(UnavailableItemException.class,
+                () -> {
+                    bs.add(booking, 1L);
+                });
+    }
+
+    @Test
+    void throwUncorrectUser() throws Exception {
+        BookingDto booking = BookingDto.builder()
+                .start(LocalDateTime.now().plusHours(3L))
+                .end(LocalDateTime.now().plusHours(4L))
+                .itemId(item.getId())
+                .booker(777L)
+                .status(AvailabilityStatus.WAITING)
+                .build();
+
+        assertThrows(NotFoundDataException.class,
+                () -> {
+                    bs.add(booking, 77777L);
+                });
 
     }
 }

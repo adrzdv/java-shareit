@@ -14,10 +14,7 @@ import ru.practicum.shareit.exceptions.NotOwnerException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoResponse;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.request.ItemRequestMapper;
 import ru.practicum.shareit.request.ItemRequestRepository;
-import ru.practicum.shareit.request.ItemRequestService;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
@@ -32,7 +29,6 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
-    private final ItemRequestService itemRequestService;
     private final ItemRequestRepository itemRequestRepository;
 
     @Override
@@ -41,16 +37,13 @@ public class ItemServiceImpl implements ItemService {
 
         Item item;
         if (itemDto.getRequestId() != 0) {
-            ItemRequestDto itemRequestDto = itemRequestService.finById(itemDto.getRequestId());
-            Optional<ItemRequest> itemRequestOptional = itemRequestRepository.findById(itemRequestDto.getId());
+
+            Optional<ItemRequest> itemRequestOptional = itemRequestRepository.findById(itemDto.getRequestId());
             if (itemRequestOptional.isEmpty()) {
                 throw new NotFoundDataException("Request not found");
             }
 
-            User requestor = userService.get(itemRequestOptional.get().getRequestor().getId());
-
-            ItemRequest itemRequest = ItemRequestMapper.fromDto(itemRequestDto, requestor);
-            item = ItemMapper.fromDtoWithRequest(itemDto, userService.get(id), itemRequest);
+            item = ItemMapper.fromDtoWithRequest(itemDto, userService.get(id), itemRequestOptional.get());
         } else {
             item = ItemMapper.fromDto(itemDto, userService.get(id));
         }
@@ -209,12 +202,6 @@ public class ItemServiceImpl implements ItemService {
                     .filter(bookingDtoResponse -> bookingDtoResponse.getItem().getId() == idItems)
                     .filter(bookingDtoResponse -> bookingDtoResponse.getEnd().isBefore(LocalDateTime.now()))
                     .filter(bookingDtoResponse -> bookingDtoResponse.getId() != bookingNext.get().getId())
-                    .max(Comparator.comparing(BookingDtoResponse::getEnd));
-            bookingPast.ifPresent(bookingDtoResponse -> result.put("Past", bookingDtoResponse.getEnd()));
-        } else {
-            Optional<BookingDtoResponse> bookingPast = bookingList.stream()
-                    .filter(bookingDtoResponse -> bookingDtoResponse.getItem().getId() == idItems)
-                    .filter(bookingDtoResponse -> bookingDtoResponse.getEnd().isBefore(LocalDateTime.now()))
                     .max(Comparator.comparing(BookingDtoResponse::getEnd));
             bookingPast.ifPresent(bookingDtoResponse -> result.put("Past", bookingDtoResponse.getEnd()));
         }

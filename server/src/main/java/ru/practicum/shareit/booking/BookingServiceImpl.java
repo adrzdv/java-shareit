@@ -43,6 +43,14 @@ public class BookingServiceImpl implements BookingService {
 
         Optional<Item> itemOptional = itemRepository.findById(bookingDto.getItemId());
 
+        if (itemOptional.isEmpty()) {
+            throw new NotFoundDataException("Item not found");
+        } else {
+            item = itemOptional.get();
+            if (!item.isAvailable()) {
+                throw new UnavailableItemException("Item is unavailable");
+            }
+        }
 
         if (bookingDto.getStart() == null || bookingDto.getEnd() == null) {
             throw new BookingException("Start or end of booking can't be NULL");
@@ -53,14 +61,7 @@ public class BookingServiceImpl implements BookingService {
         } else if (bookingDto.getEnd().isEqual(bookingDto.getStart())) {
             throw new BookingException("Start and end of booking can't be equal");
         }
-        if (itemOptional.isEmpty()) {
-            throw new NotFoundDataException("Item not found");
-        } else {
-            item = itemOptional.get();
-            if (!item.isAvailable()) {
-                throw new UnavailableItemException("Item is unavailable");
-            }
-        }
+
 
         bookingDto.setStatus(AvailabilityStatus.WAITING);
 

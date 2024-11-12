@@ -30,7 +30,7 @@ import static org.hamcrest.Matchers.equalToObject;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
-@SpringBootTest(properties = {"jdbc.url=jdbc:postgresql://localhost:5432/test"})
+@SpringBootTest
 @Rollback(value = false)
 public class ItemServiceTest {
 

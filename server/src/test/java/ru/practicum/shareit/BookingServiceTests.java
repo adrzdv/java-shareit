@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Transactional
-@SpringBootTest(properties = {"jdbc.url=jdbc:postgresql://localhost:5432/test"})
+@SpringBootTest
 @Rollback(value = false)
 public class BookingServiceTests {
     @Autowired

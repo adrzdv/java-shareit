@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
@@ -31,7 +30,7 @@ public class UserServiceTest {
     private long id;
 
     @BeforeEach
-    void setUp(WebApplicationContext wac) {
+    void setUp() {
 
         String name = RandomString.make(RandomString.DEFAULT_LENGTH);
         String email = RandomString.make(RandomString.DEFAULT_LENGTH) + "@mail.com";

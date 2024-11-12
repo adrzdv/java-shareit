@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.booking.AvailabilityStatus;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -46,7 +45,7 @@ public class BookingServiceTests {
 
 
     @BeforeEach
-    void setup(WebApplicationContext wac) throws Exception {
+    void setup() throws Exception {
         User bookerAdd = User.builder()
                 .name(RandomString.make(RandomString.DEFAULT_LENGTH))
                 .email(RandomString.make(RandomString.DEFAULT_LENGTH) + "@email.com")

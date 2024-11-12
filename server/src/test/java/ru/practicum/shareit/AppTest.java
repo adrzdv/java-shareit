@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.booking.AvailabilityStatus;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -63,7 +62,7 @@ class AppTest {
     private long idItem;
 
     @BeforeEach
-    void setup(WebApplicationContext wac) throws NotFoundDataException {
+    void setup() throws NotFoundDataException {
 
         int randomLength = 20;
         userRequestor = User.builder()

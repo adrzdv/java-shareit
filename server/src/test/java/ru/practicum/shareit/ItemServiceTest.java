@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.web.context.WebApplicationContext;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.exceptions.NotFoundDataException;
@@ -50,7 +49,7 @@ public class ItemServiceTest {
     private Item item;
 
     @BeforeEach
-    void setup(WebApplicationContext wac) throws NotFoundDataException {
+    void setup() throws NotFoundDataException {
 
 
         searchString = RandomString.make(RandomString.DEFAULT_LENGTH);
